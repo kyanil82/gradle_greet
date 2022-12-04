@@ -1,0 +1,49 @@
+plugins {
+    id 'java'
+    id 'application'
+    id "org.sonarqube" version "3.4.0.2513"
+
+}
+
+application {
+    mainClassName = 'com.greet.Greeter'
+}
+group 'com.greet'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "com.greet.Greeter"
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+sonarqube {
+    properties {
+        property 'sonar.host.url', 'http://localhost:9000'
+        property "sonar.login", "admin"
+        property "sonar.password", "anil"
+        property "sonar.projectKey", "greeter:hello"
+        property 'sonar.projectName', 'Greeter'
+        property 'sonar.java.source', 17
+        property 'sonar.junit.reportPaths', 'build/results'
+        property 'encoding', 'UTF-8'
+        property 'charSet', 'UTF-8'
+    }
+}
